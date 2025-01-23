@@ -2,42 +2,13 @@
 import SpriteKit
 
 extension GameScene {
+    
     func gameOver() {
-        // Показываем сообщение "Game Over"
-        viewModel?.isGameOver = true
-        
-        gameIsOver = true
-        let gameOverLabel = SKLabelNode(fontNamed: "Arial")
-        gameOverLabel.fontSize = 36
-        gameOverLabel.fontColor = .red
-        gameOverLabel.text = "Game Over"
-        gameOverLabel.position = CGPoint(x: frame.midX, y: frame.midY)
-        gameOverLabel.zPosition = 2
-        addChild(gameOverLabel)
-        // Завершаем анимацию для всех ножей
-        for child in children {
-            if let knife = child as? KnifeNode, !knife.isStuck {
-                knife.physicsBody?.isDynamic = true
-                knife.physicsBody?.affectedByGravity = true
-
-                // Добавляем плавный импульс
-                let randomDX = CGFloat.random(in: -20...20) // Меньший разброс
-                let randomDY = CGFloat.random(in: -30...CGFloat(-20)) // Более мягкий импульс вниз
-                knife.physicsBody?.applyImpulse(CGVector(dx: randomDX, dy: randomDY))
-
-                // Анимация плавного вращения
-                let spinDuration = CGFloat.random(in: 0.8...1.2) // Случайная продолжительность
-                let spinAction = SKAction.rotate(byAngle: .pi * 2, duration: TimeInterval(spinDuration))
-
-                // Постепенное исчезновение ножа
-                let fadeOutAction = SKAction.fadeOut(withDuration: 0.8)
-                let removeAction = SKAction.removeFromParent()
-                knife.run(SKAction.sequence([SKAction.group([spinAction, fadeOutAction]), removeAction]))
-            }
+        self.gameIsOver = true
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
+            self.viewModel?.userLosed = true
         }
-
-        // Откладываем паузу, чтобы завершить анимации
-        run(SKAction.wait(forDuration: 0.5)) { // Увеличили время ожидания
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.isPaused = true
         }
 
@@ -45,14 +16,66 @@ extension GameScene {
 
     
     func winGame() {
-        let winLabel = SKLabelNode(fontNamed: "Arial")
-        winLabel.fontSize = 36
-        winLabel.fontColor = .green
-        winLabel.text = "You Win!"
-        winLabel.position = CGPoint(x: frame.midX, y: frame.midY)
-        winLabel.zPosition = 2
-        addChild(winLabel)
-        isPaused = true
+        // Получаем все ножи, которые зафиксированы в шаре
+        let brokenCandyImage = levelData.candieImage + "Broken"
+        let candyTexture = SKTexture(imageNamed: brokenCandyImage)
+        let brokenCandySize = CGSize(width: (CGFloat(levelData.candieSize.width) / CGFloat(179)) * CGFloat(203.11),
+                                      height: (CGFloat(levelData.candieSize.height) / CGFloat(179)) * CGFloat(205))
+        rotatingCandy.texture = candyTexture
+        rotatingCandy.size = brokenCandySize
+        
+        // Убираем все текущие действия
+        rotatingCandy.removeAllActions()
+
+        // Если у rotatingCandy нет физического тела, добавим его
+        rotatingCandy.physicsBody = SKPhysicsBody(rectangleOf: rotatingCandy.size)
+        rotatingCandy.physicsBody?.affectedByGravity = true  // Включаем гравитацию
+        rotatingCandy.physicsBody?.friction = 2
+        
+        // Применяем вертикальный импульс, чтобы мячик упал вниз
+        let fallImpulse = CGVector(dx: 0, dy: -300)  // Импульс вниз
+        rotatingCandy.physicsBody?.applyImpulse(fallImpulse)
+        
+        // Создаем анимацию для уменьшения прозрачности
+        let fadeOutAction = SKAction.fadeAlpha(to: 0, duration: 1.5)  // Плавное исчезновение за 2 секунды
+        rotatingCandy.run(fadeOutAction)
+        
+        // Далее обрабатываем падение ножей
+        let knivesToFall = rotatingCandy.children.filter { $0 is KnifeNode && ($0 as! KnifeNode).isStuck }
+        
+        for knife in knivesToFall {
+            if let knifeNode = knife as? KnifeNode {
+                dropKnifeWithRandomParams(knifeNode)
+            }
+        }
+        
+        // Продолжить выполнение логики выигрыша
+        viewModel?.updateLevel()
     }
+
+    func dropKnifeWithRandomParams(_ knife: KnifeNode) {
+        // Если нож еще не имеет физического тела, создаем его
+        knife.physicsBody = SKPhysicsBody(rectangleOf: knife.size)
+        knife.physicsBody?.affectedByGravity = true  // Включаем гравитацию
+        knife.physicsBody?.friction = 0.5  // Устанавливаем трение
+        knife.physicsBody?.angularDamping = 0.1
+        
+        // Применяем вертикальный импульс (только по оси Y), чтобы нож начал падать
+        let fallImpulse = CGVector(dx: 0, dy: -200)  // Импульс вниз
+        knife.physicsBody?.applyImpulse(fallImpulse)
+        
+        // Устанавливаем случайное вращение ножа
+        let randomRotation = CGFloat.random(in: -1...1)  // Случайная скорость вращения
+        knife.physicsBody?.applyTorque(randomRotation)
+        
+        // Создаем анимацию для уменьшения прозрачности ножа
+        let fadeOutAction = SKAction.fadeAlpha(to: 0, duration: 2.0)  // Плавное исчезновение за 2 секунды
+        knife.run(fadeOutAction)
+    }
+
+
+
+
+    
 }
 

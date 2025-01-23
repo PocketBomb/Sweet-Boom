@@ -1,33 +1,65 @@
-
 import SwiftUI
 
 struct GameOverView: View {
+    var currentLevel: Int
+    var scores: Int
+    var onContinue: () -> Void
+    var onSkip: () -> Void
+
     var body: some View {
         ZStack {
             Image("gameOverView")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 313, height: 240)
-            VStack(alignment: .center, spacing: 8) {
-                Button {
-                    print("continue pressed")
-                } label: {
-                    Image("continueButton")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 237, height: 55)
+                .frame(width: 286, height: 412)
+            
+            VStack {
+                Spacer() // Заполнение пространства сверху
+                
+                VStack(alignment: .center, spacing: -15) {
+                    Text("\(scores)")
+                        .font(.custom("Acme-Regular", size: 71))
+                        .foregroundColor(.white)
+                        .shadow(
+                            color: Color(red: 120/255, green: 0/255, blue: 68/255), /// shadow color
+                                radius: 0, /// shadow radius
+                                x: 0, /// x offset
+                                y: 5 /// y offset
+                            )
+                    Text("LEVEL \(currentLevel)")
+                        .font(.custom("Acme-Regular", size: 27))
+                        .foregroundColor(.white)
+                        .shadow(
+                            color: Color(red: 120/255, green: 0/255, blue: 68/255), /// shadow color
+                                radius: 0, /// shadow radius
+                                x: 0, /// x offset
+                                y: 5 /// y offset
+                            )
                 }
+                .padding(.top, 110)
+                
+                VStack(alignment: .center, spacing: 6) { // Замените 😍 на 16 для spacing
+                    Button {
+                        onContinue()
+                    } label: {
+                        Image("continueButton")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 180, height: 40)
+                    }
 
-                Button {
-                    print("skip pressed")
-                } label: {
-                    Image("skipButton")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 46, height: 31)
+                    Button {
+                        onSkip()
+                    } label: {
+                        Image("skipButton")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 35, height: 23)
+                    }
                 }
+                .padding(.bottom, 45) // Отступ в 30 пикселей от нижней части
+
             }
-            .padding(.top, 70)
         }
     }
 }

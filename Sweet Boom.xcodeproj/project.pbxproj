@@ -10,22 +10,9 @@
 		1A4344FE2D399A0600F39C10 /* Sweet Boom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sweet Boom.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1A43453A2D39C6AF00F39C10 /* Exceptions for "Sweet Boom" folder in "Sweet Boom" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Sweet-Boom-Info.plist",
-			);
-			target = 1A4344FD2D399A0600F39C10 /* Sweet Boom */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		1A4345002D399A0600F39C10 /* Sweet Boom */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				1A43453A2D39C6AF00F39C10 /* Exceptions for "Sweet Boom" folder in "Sweet Boom" target */,
-			);
 			path = "Sweet Boom";
 			sourceTree = "<group>";
 		};

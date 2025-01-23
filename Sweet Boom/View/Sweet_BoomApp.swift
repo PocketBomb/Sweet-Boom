@@ -11,7 +11,7 @@ import SwiftUI
 struct Sweet_BoomApp: App {
     var body: some Scene {
         WindowGroup {
-            GameView()
+            MainView()
         }
     }
 }
