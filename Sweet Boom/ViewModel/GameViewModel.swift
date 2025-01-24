@@ -3,6 +3,9 @@ import SwiftUI
 
 // MARK: - ViewModel for Knife State
 class GameViewModel: ObservableObject {
+    
+    var coinsManager = CoinsManager.shared
+    
     @Published var knifeStates: [Bool] = Array(repeating: false, count: 6) // False: not thrown, True: thrown
     @Published var messageImages = ["niceImage", "sensationalImage", "superImage"]
     @Published var remainingKnives: Int = 0
@@ -29,6 +32,8 @@ class GameViewModel: ObservableObject {
     
     func updateLevel() {
         userWined = true
+//        coinsManager.addCoins(5)
+        coinsManager.addCoins(5)
         currentLevel += 1
         if currentLevel > 44 {
             currentLevel = 1 // Перезапуск с первого уровня, например

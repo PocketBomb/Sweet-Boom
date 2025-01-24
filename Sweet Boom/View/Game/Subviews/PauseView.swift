@@ -3,6 +3,7 @@ import SwiftUI
 
 struct PauseView: View {
     var onPlay: () -> Void
+    var onHome: () -> Void
     var body: some View {
         ZStack {
             Image("pauseView")
@@ -29,7 +30,7 @@ struct PauseView: View {
                             .frame(width: 50, height: 50)
                     }
                     Button {
-    //                    onContinue()
+                        onHome()
                     } label: {
                         Image("homeButton")
                             .resizable()

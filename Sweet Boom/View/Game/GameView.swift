@@ -6,6 +6,7 @@ import Foundation
 struct GameView: View {
     @StateObject private var viewModel = GameViewModel()
 //    @Published var messageImages = ["niceImage", "sensationalImage", "superImage"]
+    @Environment(\.presentationMode) var presentationMode
     @State private var currentMessageIndex: Int = 0
     @State private var isShowingMessage: Bool = false
     @State private var isPaused: Bool = false
@@ -18,6 +19,12 @@ struct GameView: View {
             return scene
         }()
     
+    var isSmallScreen: Bool {
+        get {
+            return UIScreen.main.bounds.height < 800
+        }
+    }
+    
     var body: some View {
         ZStack {
             
@@ -29,8 +36,8 @@ struct GameView: View {
             // CoinsView
             CoinsView()
                 .frame(width: 134, height: 53)
-                .position(x: UIScreen.main.bounds.width - 25 - 67, // 25 px от правой части, центр CoinsView
-                          y: 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
+                .position(x: UIScreen.main.bounds.width - 16 - 67, // 25 px от правой части, центр CoinsView
+                          y:isSmallScreen ? 53 / 2 : 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
                 .zIndex(viewModel.userLosed == true ? 3 : 0)
             
             if !viewModel.userLosed {
@@ -44,8 +51,8 @@ struct GameView: View {
                         .frame(width: 80, height: 50)
                 }
                 .frame(width: 80, height: 50)
-                    .position(x: 25 + 80 / 2, // 25 px от правой части, центр CoinsView
-                              y: 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
+                    .position(x: 16 + 80 / 2, // 25 px от правой части, центр CoinsView
+                              y: isSmallScreen ? 53 / 2 : 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
             }
 
             
@@ -74,13 +81,16 @@ struct GameView: View {
                     .zIndex(1) // Ensuring the blur effect is behind the GameOverView
                 Color(.black).opacity(0.8)
                     .edgesIgnoringSafeArea(.all)
-                PauseView(onPlay: {
+                PauseView {
                     self.isPaused.toggle()
                     scene.isPaused.toggle()
-                })
-                    .frame(width: 279, height: 259)
-                    .zIndex(3)
-                    .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2 - 259 / 4)
+                } onHome: {
+                    presentationMode.wrappedValue.dismiss()
+                }
+                .frame(width: 279, height: 259)
+                .zIndex(3)
+                .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2 - 259 / 4)
+
             }
                         
             if viewModel.userLosed {
@@ -141,6 +151,7 @@ struct GameView: View {
             scene.viewModel = viewModel
             scene.levelData = viewModel.getLevelData()
         }
+        .navigationBarBackButtonHidden(true)
         
     }
     

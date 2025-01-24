@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct CoinsView: View {
+    
+    @StateObject private var coinsManager = CoinsManager.shared
+    
     var body: some View {
         ZStack {
             Image("coinsViewImage")
@@ -23,7 +26,7 @@ struct CoinsView: View {
                         .frame(width: coinImageWidth, height: 53)
                         .padding(.leading, -7)
                     
-                    Text("9999")
+                    Text("\(coinsManager.currentCoins)")
                         .font(.custom("Funkydori", fixedSize: 40))
                         .foregroundColor(.white)
                         .frame(width: textWidth, height: 53)

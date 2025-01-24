@@ -1,9 +1,3 @@
-//
-//  Sweet_BoomApp.swift
-//  Sweet Boom
-//
-//  Created by Александр Андреев on 16.01.2025.
-//
 
 import SwiftUI
 
