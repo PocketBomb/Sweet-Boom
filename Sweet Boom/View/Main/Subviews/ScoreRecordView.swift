@@ -10,7 +10,7 @@ struct ScoreRecordView: View {
                 .frame(width: 180, height: 73)
             VStack {
                 Spacer() // Заполняет пространство сверху
-                Text("1000")
+                Text("\(LevelManeger.shared.maxScore)")
                     .font(.custom("Acme-Regular", size: 30))
                     .foregroundColor(.white)
                     .padding(.bottom, 5) // Отступ 5px от нижней границы

@@ -6,10 +6,15 @@ import Foundation
 struct GameView: View {
     @StateObject private var viewModel = GameViewModel()
 //    @Published var messageImages = ["niceImage", "sensationalImage", "superImage"]
+    @AppStorage("isFirstGame") private var isFirstGame: Bool = true
     @Environment(\.presentationMode) var presentationMode
     @State private var currentMessageIndex: Int = 0
     @State private var isShowingMessage: Bool = false
     @State private var isPaused: Bool = false
+    @State private var showCoinAnimation: Bool = false
+    @State var showInfoScreen = false
+    
+    @State var hasOnboardingShowed = false
     
     @State private var scene: GameScene = {
             let scene = GameScene()
@@ -27,7 +32,20 @@ struct GameView: View {
     
     var body: some View {
         ZStack {
-            
+            if showInfoScreen {
+                InfoView(onHome: {
+                    showInfoScreen.toggle()
+                }, isGame: true)
+                    .edgesIgnoringSafeArea(.all)
+                    .zIndex(10)
+            }
+            if isFirstGame {
+                HowToUse {
+                    isFirstGame.toggle()
+                }
+                .edgesIgnoringSafeArea(.all)
+                .zIndex(10)
+            }
             SpriteView(scene: scene)
                 .ignoresSafeArea()
                 .background(.clear)
@@ -70,7 +88,7 @@ struct GameView: View {
                     }
                 }
                 .padding(.leading, 16)
-                .padding(.bottom, 95)
+                .padding(.bottom,isSmallScreen ? 60 : 95)
             }
             .frame(maxWidth: .infinity, alignment: .leading) // Выравнивание по левому краю
             
@@ -86,6 +104,8 @@ struct GameView: View {
                     scene.isPaused.toggle()
                 } onHome: {
                     presentationMode.wrappedValue.dismiss()
+                } onInfo: {
+                    showInfoScreen.toggle()
                 }
                 .frame(width: 279, height: 259)
                 .zIndex(3)
@@ -103,6 +123,9 @@ struct GameView: View {
                 Button {
 //                    isPaused.toggle()
 //                    scene.isPaused.toggle()
+                    LevelManeger.shared.reset()
+                    presentationMode.wrappedValue.dismiss()
+                    
                 } label: {
                     Image("goHomeButton")
                         .resizable()
@@ -111,7 +134,7 @@ struct GameView: View {
                 }
                 .frame(width: 80, height: 50)
                     .position(x: 25 + 80 / 2, // 25 px от правой части, центр CoinsView
-                              y: 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
+                              y: isSmallScreen ? 53 / 2 :30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
                     .zIndex(3)
                 
                 GameOverView(
@@ -119,6 +142,7 @@ struct GameView: View {
                     scores: viewModel.scores,
                     onContinue: {
                         print("Continue button pressed")
+                        reloadGame()
                     },
                     onSkip: {
                         print("Skip button pressed")
@@ -130,6 +154,18 @@ struct GameView: View {
                     .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2 - 412 / 4)
             }
             if viewModel.userWined {
+                CoinAnimationView(startingPosition: CGPoint(x: UIScreen.main.bounds.width - 70, y: 110))
+                .zIndex(1)
+                .onAppear {
+                    // Показываем анимацию после выигрыша
+                    showCoinAnimation = true
+
+//                    // Пример задержки для показа сообщения и перехода на следующий уровень
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+//                        viewModel.userWined = false
+//                        startNextLevel()
+//                    }
+                }
                 Image(viewModel.messageImages.randomElement()!)
                         .resizable()
                         .scaledToFit()
@@ -159,19 +195,23 @@ struct GameView: View {
  
     private func startNextLevel() {
 //        viewModel.currentLevel += 1 // Переход на следующий уровень
-        let newScene = GameScene()
-        newScene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-        newScene.scaleMode = .aspectFill
-        newScene.backgroundColor = .clear
-        newScene.viewModel = viewModel // Передаём текущую модель
-        newScene.levelData = viewModel.getLevelData()
-        newScene.setupLevel(num: viewModel.currentLevel)
-        scene = newScene
+        startGameScene()
     }
     
     private func restartGame() {
         viewModel.restartLevel()
         
+        startGameScene()
+    }
+    
+    
+    private func reloadGame() {
+        viewModel.reloadLevel()
+        
+        startGameScene()
+    }
+    
+    private func startGameScene() {
         let newScene = GameScene()
         newScene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         newScene.scaleMode = .aspectFill

@@ -3,6 +3,7 @@ import SwiftUI
 struct InfoView: View {
     
     var onHome: () -> Void
+    var isGame: Bool
     
     @State private var currentIndex = 0
     private let images = [
@@ -17,10 +18,12 @@ struct InfoView: View {
     
     var body: some View {
         ZStack {
-            VisualEffectBlur(blurStyle: .dark)
-                .edgesIgnoringSafeArea(.all)
-            Color(.black).opacity(0.8)
-                .edgesIgnoringSafeArea(.all)
+            if !isGame {
+                VisualEffectBlur(blurStyle: .dark)
+                    .edgesIgnoringSafeArea(.all)
+                Color(.black).opacity(0.8)
+                    .edgesIgnoringSafeArea(.all)
+            }
             
             VStack {
                 Spacer()
@@ -30,7 +33,7 @@ struct InfoView: View {
                     .scaledToFit()
                     .frame(width: 286, height: 454)
                 
-              
+                
                 HStack {
                     
                     if currentIndex > 0 {
@@ -71,15 +74,16 @@ struct InfoView: View {
             
             // Кнопка Home
             Button {
-                 onHome()
+                onHome()
             } label: {
-                Image("homeButton")
+                Image(isGame ? "backButton" : "homeButton")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 50, height: 50)
+                    .frame(width: isGame ? 61 : 50, height: 50)
             }
-            .frame(width: 50, height: 50)
-            .position(x: 50 / 2 + 16, y: 115.5)  // Позиция для кнопки Home
+            .frame(width: isGame ? 61 : 50, height: 50)
+            .position(x: isGame ? 46.5 : 41, y: isGame && isSmallScreen ? 50 : 115.5)
+            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

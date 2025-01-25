@@ -18,6 +18,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let ballCategory: UInt32 = 0x1 << 1
     let stuckKnifeCategory: UInt32 = 0x1 << 2
     
+    var isSmallScreen: Bool {
+        get {
+            return UIScreen.main.bounds.height < 800
+        }
+    }
+    
     weak var viewModel: GameViewModel?
     
     override func didMove(to view: SKView) {

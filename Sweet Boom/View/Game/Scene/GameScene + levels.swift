@@ -8,24 +8,30 @@ extension GameScene {
         setupScene()
         let numMod = (num % 5)
         print(num)
-        
+        setupRotatingBall(size: levelData.candieSize, imageName: levelData.candieImage)
+
+        setupKnifeTemplate()
+        setupBackground(imageName: levelData.backgroundImage)
         if numMod != 0 {
             if num <= 5 {
-                setupRotatingBall(size: levelData.candieSize, imageName: levelData.candieImage)
-                startBallRotation(durationRight: Double.random(in: Double(2)...Double(5)), durationLeft: Double.random(in: Double(2)...Double(5)), speedRight: CGFloat.random(in: 1...3), speedLeft: CGFloat.random(in: 1...3))
-                setupKnifeTemplate()
-                setupBackground(imageName: levelData.backgroundImage)
+                if num == 1 {
+                    start1LevelRotation()
+                } else if num == 2{
+                    start2LevelRotation()
+                } else {
+                    startBallRotation(durationRight: Double.random(in: Double(2)...Double(5)), durationLeft: Double.random(in: Double(2)...Double(5)), speedRight: CGFloat.random(in: 1...3), speedLeft: CGFloat.random(in: 1...3))
+                }
             } else {
-                setupRotatingBall(size: levelData.candieSize, imageName: levelData.candieImage)
+//                setupRotatingBall(size: levelData.candieSize, imageName: levelData.candieImage)
                 startBallRotation(durationRight: Double.random(in: Double(2.3)...Double(4)), durationLeft: Double.random(in: Double(3)...Double(5)), speedRight: CGFloat.random(in: 1...7), speedLeft: CGFloat.random(in: 2...4))
-                setupKnifeTemplate()
-                setupBackground(imageName: levelData.backgroundImage)
+//                setupKnifeTemplate()
+//                setupBackground(imageName: levelData.backgroundImage)
             }
         } else {
-            setupRotatingBall(size: levelData.candieSize, imageName: levelData.candieImage)
-            startBossRotation(durationRight: Double.random(in: Double(2)...Double(5)), durationLeft: Double.random(in: Double(2)...Double(5)), speedRight: CGFloat.random(in: 1...3), speedLeft: CGFloat.random(in: 1...3))
-            setupKnifeTemplate()
-            setupBackground(imageName: levelData.backgroundImage)
+//
+            startBallRotation(durationRight: Double.random(in: Double(2)...Double(5)), durationLeft: Double.random(in: Double(2)...Double(5)), speedRight: CGFloat.random(in: 1...3), speedLeft: CGFloat.random(in: 1...3))
+//            setupKnifeTemplate()
+//            setupBackground(imageName: levelData.backgroundImage)
         }
     }
     
@@ -43,7 +49,7 @@ extension GameScene {
         let knifeTexture = SKTexture(imageNamed: "knifeImage")
         knifeTemplate = SKSpriteNode(texture: knifeTexture)
         knifeTemplate.size = knifeSize
-        knifeTemplate.position = CGPoint(x: frame.midX, y: frame.minY + 150)
+        knifeTemplate.position = CGPoint(x: frame.midX, y:isSmallScreen ? frame.minY + 70 : frame.minY + 150)
         addChild(knifeTemplate)
     }
     
@@ -68,6 +74,21 @@ extension GameScene {
         addChild(rotatingCandy)
     }
     
+    func start1LevelRotation() {
+        let rotateClockwise = SKAction.rotate(byAngle: -.pi * 3, duration: 4)
+        let rotationSequence = SKAction.sequence([rotateClockwise])
+        let repeatRotation = SKAction.repeatForever(rotationSequence)
+        rotatingCandy.run(repeatRotation)
+    }
+    
+    func start2LevelRotation() {
+//        let rotateClockwise = SKAction.rotate(byAngle: .pi * speedRight, duration: durationRight)
+        let rotateCounterClockwise = SKAction.rotate(byAngle: .pi * 3, duration: 4)
+        let rotationSequence = SKAction.sequence([rotateCounterClockwise])
+        let repeatRotation = SKAction.repeatForever(rotationSequence)
+        rotatingCandy.run(repeatRotation)
+    }
+    
     func startBallRotation(durationRight: Double, durationLeft: Double, speedRight: CGFloat, speedLeft: CGFloat) {
         let rotateClockwise = SKAction.rotate(byAngle: .pi * speedRight, duration: durationRight)
         let rotateCounterClockwise = SKAction.rotate(byAngle: -.pi * speedLeft, duration: durationLeft)
@@ -76,26 +97,26 @@ extension GameScene {
         rotatingCandy.run(repeatRotation)
     }
     
-    func startBossRotation(durationRight: Double, durationLeft: Double, speedRight: CGFloat, speedLeft: CGFloat) {
-        // Вращение по часовой стрелке
-        let rotateClockwise = SKAction.rotate(byAngle: .pi * speedRight, duration: durationRight)
-        
-        // Вращение против часовой стрелки
-        let rotateCounterClockwise = SKAction.rotate(byAngle: -.pi * speedLeft, duration: durationLeft)
-        
-        // Перемещение вправо (на 100 px)
-        let moveRight = SKAction.moveBy(x: 100, y: 0, duration: 0.3)  // Уменьшили время перемещения
-        // Перемещение влево (на 100 px)
-        let moveLeft = SKAction.moveBy(x: -100, y: 0, duration: 0.3)  // Уменьшили время перемещения
-        
-        // Создаем последовательность: вращение + перемещение вправо + вращение в обратную сторону + перемещение влево
-        let moveAndRotateSequence = SKAction.sequence([rotateClockwise, moveRight, rotateCounterClockwise, moveLeft])
-        
-        // Запускаем повторяющуюся анимацию
-        let repeatMoveAndRotate = SKAction.repeatForever(moveAndRotateSequence)
-        
-        rotatingCandy.run(repeatMoveAndRotate)
-    }
+//    func startBossRotation(durationRight: Double, durationLeft: Double, speedRight: CGFloat, speedLeft: CGFloat) {
+//        // Вращение по часовой стрелке
+//        let rotateClockwise = SKAction.rotate(byAngle: .pi * speedRight, duration: durationRight)
+//        
+//        // Вращение против часовой стрелки
+//        let rotateCounterClockwise = SKAction.rotate(byAngle: -.pi * speedLeft, duration: durationLeft)
+//        
+//        // Перемещение вправо (на 100 px)
+//        let moveRight = SKAction.moveBy(x: 100, y: 0, duration: 0.3)  // Уменьшили время перемещения
+//        // Перемещение влево (на 100 px)
+//        let moveLeft = SKAction.moveBy(x: -100, y: 0, duration: 0.3)  // Уменьшили время перемещения
+//        
+//        // Создаем последовательность: вращение + перемещение вправо + вращение в обратную сторону + перемещение влево
+//        let moveAndRotateSequence = SKAction.sequence([rotateClockwise, moveRight, rotateCounterClockwise, moveLeft, rotateClockwise, moveLeft,rotateCounterClockwise, moveRight])
+//        
+//        // Запускаем повторяющуюся анимацию
+//        let repeatMoveAndRotate = SKAction.repeatForever(moveAndRotateSequence)
+//        
+//        rotatingCandy.run(repeatMoveAndRotate)
+//    }
 
 
     
@@ -124,6 +145,7 @@ extension GameScene {
         addChild(knife)
 
         let moveUpAction = SKAction.moveTo(y: rotatingCandy.position.y - (ballSize.height / 2), duration: 0.2)
+//        let moveUpAction = SKAction.moveTo(y: 1000, duration: 0.5)
         knife.run(moveUpAction)
 
         if viewModel?.remainingKnives == 0 && !gameIsOver {

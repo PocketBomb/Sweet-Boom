@@ -4,6 +4,7 @@ import SwiftUI
 struct PauseView: View {
     var onPlay: () -> Void
     var onHome: () -> Void
+    var onInfo: () -> Void
     var body: some View {
         ZStack {
             Image("pauseView")
@@ -14,7 +15,7 @@ struct PauseView: View {
                 Spacer()
                 HStack(spacing: 30) {
                     Button {
-    //                    onContinue()
+                        onInfo()
                     } label: {
                         Image("infoButton")
                             .resizable()

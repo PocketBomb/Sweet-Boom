@@ -19,7 +19,7 @@ struct MainView: View {
                 if showInfoScreen {
                     InfoView(onHome: {
                         showInfoScreen.toggle()
-                    })
+                    }, isGame: false)
                         .edgesIgnoringSafeArea(.all)
                         .zIndex(10)
                 }
@@ -76,16 +76,6 @@ struct MainView: View {
                     
                     Spacer()
                     HStack(spacing: -40) {
-//                        Button {
-//                            print("shop pressed")
-//                        } label: {
-//                            Image("shopButton")
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: 124, height: 143)
-//                        }
-//                        .frame(width: 124, height: 143)
-                        
                         NavigationLink(destination: CharacterShopView()) {
                             Image("shopButton")
                                 .resizable()
@@ -112,14 +102,4 @@ struct MainView: View {
     }
 }
 
-//struct GameView: View {
-//    var body: some View {
-//        VStack {
-//            Text("Game Screen")
-//                .font(.largeTitle)
-//            Spacer()
-//        }
-//        .navigationBarBackButtonHidden(true) // Опционально, чтобы скрыть кнопку "Назад"
-//    }
-//}
 
