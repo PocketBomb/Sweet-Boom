@@ -11,9 +11,9 @@ struct ScoreRecordView: View {
                 .frame(width: 180, height: 73)
             VStack {
                 Spacer()
-                Text("\(LevelManeger.shared.maxScore)")
+                CustomStrokeText(text: "\(LevelManeger.shared.maxScore)", width: 1.5, color: Color(red: 1.0, green: 0.463, blue: 0.761))
                     .font(.custom("Acme-Regular", size: 30))
-                    .foregroundColor(.white)
+                    .foregroundColor(.white.opacity(0.8))
                     .padding(.bottom, 5)
             }
             .frame(width: 180, height: 73)
@@ -32,10 +32,10 @@ struct HighestLevelView: View {
                 .frame(width: 180, height: 73)
             VStack {
                 Spacer()
-                Text("\(LevelManeger.shared.maxLevel)")
+                CustomStrokeText(text: "\(LevelManeger.shared.maxLevel)", width: 1.5, color: Color(red: 1.0, green: 0.463, blue: 0.761))
                     .font(.custom("Acme-Regular", size: 30))
-                    .foregroundColor(.white)
-                    .padding(.bottom, 5) 
+                    .foregroundColor(.white.opacity(0.8))
+                    .padding(.bottom, 5)
             }
             .frame(width: 180, height: 73)
         }
