@@ -1,10 +1,11 @@
 
 import SwiftUI
 
+//MARK: - Adding coin animation(if User win)
 struct CoinAnimationView: View {
     @State private var position: CGPoint
     @State private var opacity: Double = 1.0
-    let coinImage: String = "coinImage" // Замените на имя вашего изображения монеты
+    let coinImage: String = "coinImage"
 
     init(startingPosition: CGPoint) {
         _position = State(initialValue: startingPosition)
@@ -14,7 +15,7 @@ struct CoinAnimationView: View {
         HStack(alignment: .center,spacing: 3) {
             Text("+5")
                 .font(.custom("Acme-Regular", size: 20))
-                .foregroundColor(.white) // Цвет текста
+                .foregroundColor(.white) //text color
             Image(coinImage)
                 .resizable()
                 .scaledToFit()
@@ -29,8 +30,8 @@ struct CoinAnimationView: View {
 
     private func animateCoin() {
         withAnimation(Animation.easeOut(duration: 2.0)) {
-            position.y -= 50 // Перемещаем монету вниз на 40 px
-            opacity = 0.0 // Плавное исчезновение
+            position.y -= 50 //animate down
+            opacity = 0.0 //smooth disappearance
         }
     }
 }

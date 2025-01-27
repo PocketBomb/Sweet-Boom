@@ -13,12 +13,7 @@ struct LittleStoryView: View {
     let leftButtonImage = "left"
     let rightButtonImage = "right"
     let startButtonImage = "startButtonImage"
-    
-    var isSmallScreen: Bool {
-        get {
-            return UIScreen.main.bounds.height < 800
-        }
-    }
+
     
     var body: some View {
         
@@ -39,7 +34,7 @@ struct LittleStoryView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 328, height: 121)
-                        .padding(.top, isSmallScreen ? 0 : 26)
+                        .padding(.top, ScreenData.shared.isSmallScreen ? 0 : 26)
                     
                     // Page Indicator (Circles)
                     HStack(spacing: 14) {
@@ -50,7 +45,7 @@ struct LittleStoryView: View {
                                 .frame(width: 33, height: 33)
                         }
                     }
-                    .padding(.top, isSmallScreen ? 0 : 26)
+                    .padding(.top, ScreenData.shared.isSmallScreen ? 0 : 26)
                     
                     Spacer()
                     

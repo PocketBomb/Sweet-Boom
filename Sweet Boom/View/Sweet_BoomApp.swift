@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 @main
@@ -10,12 +11,14 @@ struct Sweet_BoomApp: App {
     var body: some Scene {
         WindowGroup {
             if isLoading {
+                //MARK: - Loading View
                 LoadingView(onMain: {
                     isLoading.toggle()
                 })
                     .edgesIgnoringSafeArea(.all)
             } else {
                 if isFirstLaunch && !isMain {
+                    //MARK: - only 1 time
                     LittleStoryView(onMain: {
                         isFirstLaunch = false
                         isMain = true
@@ -23,6 +26,7 @@ struct Sweet_BoomApp: App {
                         .edgesIgnoringSafeArea(.all)
                         
                 } else {
+                    //MARK: - Main View
                     MainView()
                         .edgesIgnoringSafeArea(.all)
                 }

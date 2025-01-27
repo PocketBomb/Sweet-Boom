@@ -1,6 +1,7 @@
 
 import SwiftUI
 
+//MARK: - Pause View shows when pauseButton pressed
 struct PauseView: View {
     var onPlay: () -> Void
     var onHome: () -> Void

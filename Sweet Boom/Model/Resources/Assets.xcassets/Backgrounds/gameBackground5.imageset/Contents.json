@@ -1,8 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Game-5.pdf",
-      "idiom" : "universal"
+      "filename" : "Game-5.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

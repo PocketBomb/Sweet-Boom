@@ -1,34 +1,27 @@
+
 import SwiftUI
 
+//MARK: - Main Screen of app
 struct MainView: View {
     
+    //state properties
     @State var showGameScreen = false
     @State var showInfoScreen = false
     
     @AppStorage("heroImage") var currentHeroImageName: String = "hero0Image"
-    
-    var isSmallScreen: Bool {
-        get {
-            return UIScreen.main.bounds.height < 800
-        }
-    }
-    
+
+    //sorry for it. I'm only study SwiftUI and I know that it is very big property
     var body: some View {
         NavigationView {
             ZStack {
-                if showInfoScreen {
-                    InfoView(onHome: {
-                        showInfoScreen.toggle()
-                    }, isGame: false)
-                        .edgesIgnoringSafeArea(.all)
-                        .zIndex(10)
-                }
+                //backfround
                 Image("mainBackgroundImage")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
                 VStack {
                     HStack {
+                        //Button --> Info View
                         Button {
                             print("infoPressed")
                             showInfoScreen.toggle()
@@ -42,6 +35,7 @@ struct MainView: View {
                         .padding(.top, 44 + 50/2)
                         .padding(.leading, 16)
                         Spacer()
+                        //MARK: - Coins View
                         CoinsView()
                             .frame(width: 134, height: 53)
                             .padding(.top, 44 + 53 / 2)
@@ -49,7 +43,7 @@ struct MainView: View {
                     }
                     .padding(.top, 18)
 
-                    // Второй HStack
+                    //MARK: - Records
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: -30) {
                             ScoreRecordView()
@@ -62,9 +56,9 @@ struct MainView: View {
                         Spacer()
                         HighestLevelView()
                     }
-                    .padding(.top, isSmallScreen ? 40 : 89)
+                    .padding(.top, ScreenData.shared.isSmallScreen ? 40 : 89)
                     
-                    // NavigationLink для перехода на GameView
+                    //Button --> GameView
                     NavigationLink(destination: GameView()) {
                         Image("tapToPlayButton")
                             .resizable()
@@ -76,6 +70,7 @@ struct MainView: View {
                     
                     Spacer()
                     HStack(spacing: -40) {
+                        //Button --> Shop View
                         NavigationLink(destination: CharacterShopView()) {
                             Image("shopButton")
                                 .resizable()
@@ -83,6 +78,7 @@ struct MainView: View {
                                 .frame(width: 124, height: 143)
                         }
                         .frame(width: 124, height: 143)
+                        //MARK: - Character
                         Image(currentHeroImageName)
                             .resizable()
                             .scaledToFit()
@@ -95,7 +91,14 @@ struct MainView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 68, height: 68)
-                    .position(x: UIScreen.main.bounds.width - 34, y: isSmallScreen ? 172.5: 221.5)
+                    .position(x: UIScreen.main.bounds.width - 34, y: ScreenData.shared.isSmallScreen ? 172.5: 221.5)
+                if showInfoScreen {
+                    InfoView(onHome: {
+                        showInfoScreen.toggle()
+                    }, isGame: false)
+                        .edgesIgnoringSafeArea(.all)
+                        .zIndex(10)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }

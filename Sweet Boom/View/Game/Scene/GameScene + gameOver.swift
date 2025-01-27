@@ -1,9 +1,11 @@
 
 import SpriteKit
 
+//MARK: - for last actions in GameScene after game over
 extension GameScene {
     
-    func gameOver() {
+    //MARK: - LOSE action
+    func loseGame() {
         self.gameIsOver = true
         DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
             self.viewModel?.userLosed = true
@@ -15,8 +17,9 @@ extension GameScene {
     }
 
     
+    //MARK: - WIN action
     func winGame() {
-        // Получаем все ножи, которые зафиксированы в шаре
+        //get all knifes from canfy
         let brokenCandyImage = levelData.candieImage + "Broken"
         let candyTexture = SKTexture(imageNamed: brokenCandyImage)
         let brokenCandySize = CGSize(width: (CGFloat(levelData.candieSize.width) / CGFloat(179)) * CGFloat(203.11),
@@ -24,23 +27,22 @@ extension GameScene {
         rotatingCandy.texture = candyTexture
         rotatingCandy.size = brokenCandySize
         
-        // Убираем все текущие действия
+        //remove knifes
         rotatingCandy.removeAllActions()
 
-        // Если у rotatingCandy нет физического тела, добавим его
         rotatingCandy.physicsBody = SKPhysicsBody(rectangleOf: rotatingCandy.size)
-        rotatingCandy.physicsBody?.affectedByGravity = true  // Включаем гравитацию
+        rotatingCandy.physicsBody?.affectedByGravity = true  //set gravity
         rotatingCandy.physicsBody?.friction = 2
         
-        // Применяем вертикальный импульс, чтобы мячик упал вниз
-        let fallImpulse = CGVector(dx: 0, dy: -300)  // Импульс вниз
+        
+        let fallImpulse = CGVector(dx: 0, dy: -300)  //impulse down
         rotatingCandy.physicsBody?.applyImpulse(fallImpulse)
         
-        // Создаем анимацию для уменьшения прозрачности
-        let fadeOutAction = SKAction.fadeAlpha(to: 0, duration: 1.5)  // Плавное исчезновение за 2 секунды
+        //candy fade out
+        let fadeOutAction = SKAction.fadeAlpha(to: 0, duration: 1.5)
         rotatingCandy.run(fadeOutAction)
         
-        // Далее обрабатываем падение ножей
+        //knifes down
         let knivesToFall = rotatingCandy.children.filter { $0 is KnifeNode && ($0 as! KnifeNode).isStuck }
         
         for knife in knivesToFall {
@@ -49,27 +51,26 @@ extension GameScene {
             }
         }
         
-        // Продолжить выполнение логики выигрыша
+        //next level
         viewModel?.updateLevel()
     }
 
     func dropKnifeWithRandomParams(_ knife: KnifeNode) {
-        // Если нож еще не имеет физического тела, создаем его
         knife.physicsBody = SKPhysicsBody(rectangleOf: knife.size)
-        knife.physicsBody?.affectedByGravity = true  // Включаем гравитацию
-        knife.physicsBody?.friction = 0.5  // Устанавливаем трение
+        knife.physicsBody?.affectedByGravity = true  //set gravity
+        knife.physicsBody?.friction = 0.5  //set friction
         knife.physicsBody?.angularDamping = 0.1
         
-        // Применяем вертикальный импульс (только по оси Y), чтобы нож начал падать
-        let fallImpulse = CGVector(dx: 0, dy: -200)  // Импульс вниз
+        //set vertical impuls
+        let fallImpulse = CGVector(dx: 0, dy: -200)  //impulse down
         knife.physicsBody?.applyImpulse(fallImpulse)
         
-        // Устанавливаем случайное вращение ножа
-        let randomRotation = CGFloat.random(in: -1...1)  // Случайная скорость вращения
+        //set random rotation
+        let randomRotation = CGFloat.random(in: -1...1)  //radom speed
         knife.physicsBody?.applyTorque(randomRotation)
         
-        // Создаем анимацию для уменьшения прозрачности ножа
-        let fadeOutAction = SKAction.fadeAlpha(to: 0, duration: 2.0)  // Плавное исчезновение за 2 секунды
+        //out animate
+        let fadeOutAction = SKAction.fadeAlpha(to: 0, duration: 2.0)  // 2 seconds animation
         knife.run(fadeOutAction)
     }
 

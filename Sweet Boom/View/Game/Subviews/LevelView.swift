@@ -5,17 +5,12 @@ import SwiftUI
 struct LevelView: View {
     @Binding var currentLevel: Int
     let totalLevels = 5
-    var isSmallScreen: Bool {
-        get {
-            return UIScreen.main.bounds.height < 800
-        }
-    }
     
     var body: some View {
         VStack(spacing: 3) {
             StrokeText(text: currentLevel % 5 == 0 ? "Special level" :"Level \(currentLevel)", width: 2, color: Color(red: 1.0, green: 0.463, blue: 0.761))
                 .font(.custom("Acme-Regular", size: 46))
-                .foregroundColor(.white) // Цвет текста
+                .foregroundColor(.white) //text color
             HStack(spacing: 12) {
                 ForEach(0..<totalLevels, id: \.self) { index in
                     Image(levelImage(for: index))
@@ -26,7 +21,7 @@ struct LevelView: View {
                 }
             }
         }
-        .position(x: UIScreen.main.bounds.width / 2, y:isSmallScreen ? 120 : 170) // Располагаем по центру с отступом от верхней части
+        .position(x: UIScreen.main.bounds.width / 2, y: ScreenData.shared.isSmallScreen ? 120 : 170) // Располагаем по центру с отступом от верхней части
     }
     
     // Метод для выбора изображения в зависимости от уровня

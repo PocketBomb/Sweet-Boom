@@ -1,3 +1,4 @@
+
 import SwiftUI
 import SpriteKit
 import Foundation
@@ -5,33 +6,33 @@ import Foundation
 // MARK: - Game View
 struct GameView: View {
     @StateObject private var viewModel = GameViewModel()
-//    @Published var messageImages = ["niceImage", "sensationalImage", "superImage"]
+    
     @AppStorage("isFirstGame") private var isFirstGame: Bool = true
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.presentationMode) var presentationMode //for dismiss
+    
+    //MARK: - state properties
     @State private var currentMessageIndex: Int = 0
     @State private var isShowingMessage: Bool = false
     @State private var isPaused: Bool = false
     @State private var showCoinAnimation: Bool = false
     @State var showInfoScreen = false
-    
     @State var hasOnboardingShowed = false
     
+    //MARK: - GameScene
     @State private var scene: GameScene = {
-            let scene = GameScene()
-            scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            scene.scaleMode = .aspectFill
-            scene.backgroundColor = .clear
-            return scene
-        }()
+        let scene = GameScene()
+        scene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        scene.scaleMode = .aspectFill
+        scene.backgroundColor = .clear
+        return scene
+    }()
+
     
-    var isSmallScreen: Bool {
-        get {
-            return UIScreen.main.bounds.height < 800
-        }
-    }
-    
+    //sorry for it. I'm only study SwiftUI and I know that it is very big property
     var body: some View {
         ZStack {
+            
+            //MARK: - Info
             if showInfoScreen {
                 InfoView(onHome: {
                     showInfoScreen.toggle()
@@ -39,6 +40,7 @@ struct GameView: View {
                     .edgesIgnoringSafeArea(.all)
                     .zIndex(10)
             }
+            //MARK: - How to use
             if isFirstGame {
                 HowToUse {
                     isFirstGame.toggle()
@@ -46,19 +48,23 @@ struct GameView: View {
                 .edgesIgnoringSafeArea(.all)
                 .zIndex(10)
             }
+            
+            //MARK: - Game
             SpriteView(scene: scene)
                 .ignoresSafeArea()
                 .background(.clear)
                 .id(scene)
             
-            // CoinsView
+            //MARK: - CoinsView
             CoinsView()
                 .frame(width: 134, height: 53)
-                .position(x: UIScreen.main.bounds.width - 16 - 67, // 25 px от правой части, центр CoinsView
-                          y:isSmallScreen ? 53 / 2 : 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
+                .position(x: UIScreen.main.bounds.width - 16 - 67,
+                          y:ScreenData.shared.isSmallScreen ? 53 / 2 : 30 + 53 / 2)
                 .zIndex(viewModel.userLosed == true ? 3 : 0)
             
+            
             if !viewModel.userLosed {
+                //MARK: - Pause button
                 Button {
                     isPaused.toggle()
                     scene.isPaused.toggle()
@@ -69,16 +75,15 @@ struct GameView: View {
                         .frame(width: 80, height: 50)
                 }
                 .frame(width: 80, height: 50)
-                    .position(x: 16 + 80 / 2, // 25 px от правой части, центр CoinsView
-                              y: isSmallScreen ? 53 / 2 : 30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
+                    .position(x: 16 + 80 / 2,
+                              y: ScreenData.shared.isSmallScreen ? 53 / 2 : 30 + 53 / 2)
             }
 
             
 
-            // Knife Counter View (aligned to the left)
+            //MARK: - Knifes counter view
             VStack {
                 Spacer()
-                // Knife Counter View
                 VStack(alignment: .leading, spacing: -20) {
                     ForEach(0..<viewModel.knifeStates.count, id: \.self) { index in
                         Image(viewModel.knifeStates[index] ? "knifeThrown" : "knifeWhite")
@@ -88,15 +93,18 @@ struct GameView: View {
                     }
                 }
                 .padding(.leading, 16)
-                .padding(.bottom,isSmallScreen ? 60 : 95)
+                .padding(.bottom, ScreenData.shared.isSmallScreen ? 60 : 95)
             }
-            .frame(maxWidth: .infinity, alignment: .leading) // Выравнивание по левому краю
+            .frame(maxWidth: .infinity, alignment: .leading)
             
+            //MARK: - level view
             LevelView(currentLevel: $viewModel.currentLevel)
+            
+            //MARK: - Pause
             if isPaused {
                 VisualEffectBlur(blurStyle: .dark)
                     .edgesIgnoringSafeArea(.all)
-                    .zIndex(1) // Ensuring the blur effect is behind the GameOverView
+                    .zIndex(1) //ensuring the blur effect is behind the GameOverView
                 Color(.black).opacity(0.8)
                     .edgesIgnoringSafeArea(.all)
                 PauseView {
@@ -112,17 +120,15 @@ struct GameView: View {
                 .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2 - 259 / 4)
 
             }
-                        
+            //MARK: - Lose View
             if viewModel.userLosed {
-                // Full screen blur effect
+                //full screen blur effect
                 VisualEffectBlur(blurStyle: .dark)
                     .edgesIgnoringSafeArea(.all)
-                    .zIndex(1) // Ensuring the blur effect is behind the GameOverView
+                    .zIndex(1) //ensuring the blur effect is behind the GameOverView
                 Color(.black).opacity(0.8)
                     .edgesIgnoringSafeArea(.all)
                 Button {
-//                    isPaused.toggle()
-//                    scene.isPaused.toggle()
                     LevelManeger.shared.reset()
                     presentationMode.wrappedValue.dismiss()
                     
@@ -133,8 +139,8 @@ struct GameView: View {
                         .frame(width: 80, height: 50)
                 }
                 .frame(width: 80, height: 50)
-                    .position(x: 25 + 80 / 2, // 25 px от правой части, центр CoinsView
-                              y: isSmallScreen ? 53 / 2 :30 + 53 / 2) // 50 px от safeArea top, центр CoinsView
+                    .position(x: 25 + 80 / 2,
+                              y: ScreenData.shared.isSmallScreen ? 53 / 2 :30 + 53 / 2)
                     .zIndex(3)
                 
                 GameOverView(
@@ -153,18 +159,13 @@ struct GameView: View {
                     .zIndex(3)
                     .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2 - 412 / 4)
             }
+            
+            //MARK: - Win View
             if viewModel.userWined {
                 CoinAnimationView(startingPosition: CGPoint(x: UIScreen.main.bounds.width - 70, y: 110))
                 .zIndex(1)
                 .onAppear {
-                    // Показываем анимацию после выигрыша
                     showCoinAnimation = true
-
-//                    // Пример задержки для показа сообщения и перехода на следующий уровень
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-//                        viewModel.userWined = false
-//                        startNextLevel()
-//                    }
                 }
                 Image(viewModel.messageImages.randomElement()!)
                         .resizable()
@@ -173,7 +174,6 @@ struct GameView: View {
                         .transition(.scale)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                                showNextMessage()
                                 viewModel.userWined = false
                                 currentMessageIndex = 0
                                 startNextLevel()
@@ -183,6 +183,7 @@ struct GameView: View {
             }
             
         }
+        //MARK: - Update
         .onAppear {
             scene.viewModel = viewModel
             scene.levelData = viewModel.getLevelData()
@@ -191,32 +192,28 @@ struct GameView: View {
         
     }
     
-
- 
     private func startNextLevel() {
-//        viewModel.currentLevel += 1 // Переход на следующий уровень
         startGameScene()
     }
     
     private func restartGame() {
         viewModel.restartLevel()
-        
         startGameScene()
     }
     
     
     private func reloadGame() {
         viewModel.reloadLevel()
-        
         startGameScene()
     }
     
+    //MARK: - Setup new scene
     private func startGameScene() {
         let newScene = GameScene()
         newScene.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         newScene.scaleMode = .aspectFill
         newScene.backgroundColor = .clear
-        newScene.viewModel = viewModel // Передаём текущую модель
+        newScene.viewModel = viewModel
         newScene.levelData = viewModel.getLevelData()
         newScene.setupLevel(num: viewModel.currentLevel)
         scene = newScene

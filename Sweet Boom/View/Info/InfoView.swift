@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct InfoView: View {
@@ -10,11 +11,6 @@ struct InfoView: View {
         "info1Image", "info2Image", "info3Image", "info4Image"
     ]
     
-    var isSmallScreen: Bool {
-        get {
-            return UIScreen.main.bounds.height < 800
-        }
-    }
     
     var body: some View {
         ZStack {
@@ -82,7 +78,7 @@ struct InfoView: View {
                     .frame(width: isGame ? 61 : 50, height: 50)
             }
             .frame(width: isGame ? 61 : 50, height: 50)
-            .position(x: isGame ? 46.5 : 41, y: isGame && isSmallScreen ? 50 : 115.5)
+            .position(x: isGame ? 46.5 : 41, y: isGame && ScreenData.shared.isSmallScreen ? 50 : 115.5)
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -1,6 +1,7 @@
 
 import SwiftUI
 
+//MARK: - How To Use(like info) 
 struct HowToUse: View {
     
     var onGame: () -> Void
@@ -9,12 +10,6 @@ struct HowToUse: View {
     private let images = [
         "howToUse1", "howToUse2", "howToUse3", "howToUse4"
     ]
-    
-    var isSmallScreen: Bool {
-        get {
-            return UIScreen.main.bounds.height < 800
-        }
-    }
     
     var body: some View {
         ZStack {
@@ -90,7 +85,7 @@ struct HowToUse: View {
                         .frame(width: 42, height: 30)
                 }
                 .frame(width: 42, height: 30)
-                .position(x: UIScreen.main.bounds.width - 44 - 21, y:isSmallScreen ? 60 : 115.5)  // Позиция для кнопки Home
+                .position(x: UIScreen.main.bounds.width - 44 - 21, y: ScreenData.shared.isSmallScreen ? 60 : 115.5)  // Позиция для кнопки Home
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -1,6 +1,7 @@
 
 import SwiftUI
 
+//MARK: - StrokeText, its custom shadow in "Acme-Regular" font
 struct StrokeText: View {
     let text: String
     let width: CGFloat

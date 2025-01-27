@@ -5,9 +5,9 @@ class GameViewModel: ObservableObject {
     
     var coinsManager = CoinsManager.shared
     
-    @Published var knifeStates: [Bool] = Array(repeating: false, count: 6) // False: not thrown, True: thrown
+    @Published var knifeStates: [Bool] = Array(repeating: false, count: 6) //false: not thrown, True: thrown
     @Published var messageImages = ["niceImage", "sensationalImage", "superImage"]
-    @Published var remainingKnives: Int = 0
+    @Published var remainingKnifes: Int = 0
     @Published var userLosed: Bool = false
     @Published var userWined: Bool = false
     @Published var showMessageSequence: Bool = false
@@ -21,16 +21,16 @@ class GameViewModel: ObservableObject {
         
         // Загружаем данные текущего уровня
         let levelData = LevelManeger.shared.getLevelData(by: currentLevel)
-        self.remainingKnives = levelData.countKnifes
+        self.remainingKnifes = levelData.countKnifes
         print(self.currentLevel)
     }
     
     // Метод для выбрасывания ножа
     func knifeThrown() {
-        guard remainingKnives > 0 else { return }
+        guard remainingKnifes > 0 else { return }
         if let index = knifeStates.firstIndex(of: false) {
             knifeStates[index] = true
-            remainingKnives -= 1
+            remainingKnifes -= 1
         }
     }
     
@@ -49,14 +49,14 @@ class GameViewModel: ObservableObject {
         LevelManeger.shared.updateLevelAndScore(level: currentLevel, score: scores)
         // Обновляем данные текущего уровня
         let levelData = LevelManeger.shared.getLevelData(by: currentLevel)
-        remainingKnives = levelData.countKnifes
+        remainingKnifes = levelData.countKnifes
         knifeStates = Array(repeating: false, count: levelData.countKnifes)
     }
     
     // Получение данных уровня
-    func getLevelData() -> LevelData {
+    func getLevelData() -> Level {
         let levelData = LevelManeger.shared.getLevelData(by: currentLevel)
-        remainingKnives = levelData.countKnifes
+        remainingKnifes = levelData.countKnifes
         knifeStates = Array(repeating: false, count: levelData.countKnifes)
         return levelData
     }
@@ -82,7 +82,6 @@ class GameViewModel: ObservableObject {
     // Добавление очков
     func addScore() {
         scores += 1
-//        LevelManeger.shared.updateLevelAndScore(level: currentLevel, score: scores)
     }
     
     

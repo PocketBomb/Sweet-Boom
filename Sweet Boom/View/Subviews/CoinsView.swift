@@ -1,5 +1,8 @@
+
 import SwiftUI
 
+//MARK: - CoinsView locate on All Screens of app and show total
+//count of coins of user
 struct CoinsView: View {
     
     @StateObject private var coinsManager = CoinsManager.shared
@@ -16,7 +19,6 @@ struct CoinsView: View {
                 let coinViewWidth: CGFloat = 134
                 let textWidth: CGFloat = 81
                 
-                // Рассчитаем отступ текста, чтобы он оказался по центру
                 let textOffsetX = (coinViewWidth - coinImageWidth - textWidth) / 2 + coinImageWidth
                 
                 HStack(spacing: 0) {
@@ -27,16 +29,16 @@ struct CoinsView: View {
                         .padding(.leading, -7)
                     
                     Text("\(coinsManager.currentCoins)")
-                        .font(.custom("Funkydori", fixedSize: 40))
+                        .font(.custom("Acme-Regular", fixedSize: 40))
                         .foregroundColor(.white)
                         .frame(width: textWidth, height: 53)
-                        .offset(x: textOffsetX - coinImageWidth-10)
-                        .padding(.top, 7)
+                        .offset(x: textOffsetX - coinImageWidth - 10)
+                        .padding(.top, -1)
                         .padding(.leading, 3)
                 }
                 .frame(width: coinViewWidth, height: 53, alignment: .leading)
             }
-            .frame(width: 134, height: 53) // Размер контейнера
+            .frame(width: 134, height: 53) // size
         }
     }
 }

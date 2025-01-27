@@ -1,5 +1,7 @@
+
 import SwiftUI
 
+//MARK: - Game Over View shows when contact registred with 2 knifes
 struct GameOverView: View {
     var currentLevel: Int
     var scores: Int
@@ -14,7 +16,7 @@ struct GameOverView: View {
                 .frame(width: 286, height: 412)
             
             VStack {
-                Spacer() // Заполнение пространства сверху
+                Spacer()
                 
                 VStack(alignment: .center, spacing: -15) {
                     Text("\(scores)")
@@ -38,7 +40,7 @@ struct GameOverView: View {
                 }
                 .padding(.top, 110)
                 
-                VStack(alignment: .center, spacing: 6) { // Замените 😍 на 16 для spacing
+                VStack(alignment: .center, spacing: 6) {
                     Button {
                         onContinue()
                     } label: {
@@ -57,7 +59,7 @@ struct GameOverView: View {
                             .frame(width: 35, height: 23)
                     }
                 }
-                .padding(.bottom, 45) // Отступ в 30 пикселей от нижней части
+                .padding(.bottom, 45)
 
             }
         }

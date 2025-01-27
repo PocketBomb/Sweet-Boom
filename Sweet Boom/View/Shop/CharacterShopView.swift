@@ -1,20 +1,19 @@
+
 import SwiftUI
 
+//MARK: - Shop View
 struct CharacterShopView: View {
-    @StateObject private var store = CharacterStore()
+    @StateObject private var store = CharacterShopViewModel()
     @State var backPressed = false
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         ZStack {
+            //back
             Image("shopBackgroundImage")
                 .resizable()
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
-            
-//            VStack {
-//                
-//            }
             
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
@@ -26,7 +25,7 @@ struct CharacterShopView: View {
                         .frame(width: 151, height: 95)
                         .padding(.top, 150)
                     
-                    // Изображение выбранного персонажа и кнопка
+                    //MARK: - character image
                     VStack(alignment: .center, spacing: -40) {
                         let selectedCharacter = store.characters[store.selectedCharacterId]
                         Image(selectedCharacter.images.heroImage)
@@ -34,7 +33,7 @@ struct CharacterShopView: View {
                             .scaledToFit()
                             .frame(width: 228, height: 228)
                         
-                        // Кнопка для выбора/покупки персонажа
+                        //MARK: - Button
                         Button(action: {
                             if selectedCharacter.isOwned {
                                 store.chooseCharacter(id: store.selectedCharacterId)
@@ -42,21 +41,41 @@ struct CharacterShopView: View {
                                 store.buyCharacter(id: store.selectedCharacterId)
                             }
                         }) {
-                            Image(store.getButtonText(for: selectedCharacter))
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 134, height: 50)
+                            ZStack {
+                                Image(store.getButtonText(for: selectedCharacter))
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 134, height: 50)
+                                
+                                //MARK: - not owned
+                                if store.getButtonText(for: selectedCharacter).contains("buyButton") {
+                                    HStack(alignment: .center, spacing: 5) {
+                                        Spacer()
+                                        CustomStrokeText(text: "\(selectedCharacter.price)", width: 2, color: Color(red: 120/255, green: 0/255, blue: 68/255))
+                                            .foregroundStyle(.white)
+                                            .font(.custom("Acme-Regular", size: 27))
+                                            .padding(.bottom, 5)
+                                        Image("coinImage")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 38, height: 38)
+                                        Spacer()
+                                    }
+                                   
+                                }
+                            }
                         }
                     }
                     .padding(.top, 20)
                     
-                    // Ячейки с персонажами
+                    //MARK: - characters
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                         ForEach(store.characters.indices, id: \.self) { index in
                             let character = store.characters[index]
                             Button(action: {
                                 store.selectCharacter(id: index)
                             }) {
+                                //MARK: - is it owned?
                                 if character.isOwned {
                                     if character.isSelected {
                                         Image(character.images.ownedSelectedImage)
@@ -69,6 +88,7 @@ struct CharacterShopView: View {
                                             .scaledToFit()
                                             .frame(width: 161, height: 145)
                                     }
+                                //MARK: - is it selected?
                                 } else {
                                     if character.isSelected {
                                         Image(character.images.selectedImage)
@@ -93,9 +113,9 @@ struct CharacterShopView: View {
             }
             
             HStack {
+                //Button --> MainView
                 Button {
                     print("back Pressed")
-//                            backPressed.toggle()
                     presentationMode.wrappedValue.dismiss()
                 } label: {
                     Image("backButton")
@@ -104,14 +124,13 @@ struct CharacterShopView: View {
                         .frame(width: 61, height: 50)
                 }
                 .frame(width: 61, height: 50)
-//                .padding(.top, 44 + 50/2)
                 .padding(.leading, 16)
                 
                 Spacer()
                 
+                //MARK: - CoinView
                 CoinsView()
                     .frame(width: 134, height: 53)
-//                    .padding(.top, 44 + 53 / 2)
                     .padding(.trailing, 16)
             }
             .position(x: UIScreen.main.bounds.width / 2 ,y: 116)
