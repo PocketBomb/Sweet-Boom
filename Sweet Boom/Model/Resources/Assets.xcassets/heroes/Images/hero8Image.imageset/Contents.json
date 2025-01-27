@@ -1,8 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "create-an-adorable-dog-character-made-entirely-of- (2)-Photoroom 2-5.pdf",
-      "idiom" : "universal"
+      "filename" : "create-an-adorable-dog-character-made-entirely-of- (2)-Photoroom 2-5.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {
