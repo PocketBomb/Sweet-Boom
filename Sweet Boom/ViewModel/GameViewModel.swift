@@ -15,17 +15,16 @@ class GameViewModel: ObservableObject {
     @Published var scores: Int = 0
     
     init() {
-        // Загружаем данные из LevelManeger
+        //download data from LevelManager
         self.currentLevel = LevelManeger.shared.currentLevel
         self.scores = LevelManeger.shared.currentScore
         
-        // Загружаем данные текущего уровня
+        //load current level data
         let levelData = LevelManeger.shared.getLevelData(by: currentLevel)
         self.remainingKnifes = levelData.countKnifes
-        print(self.currentLevel)
     }
     
-    // Метод для выбрасывания ножа
+    //knifes
     func knifeThrown() {
         guard remainingKnifes > 0 else { return }
         if let index = knifeStates.firstIndex(of: false) {
@@ -34,26 +33,26 @@ class GameViewModel: ObservableObject {
         }
     }
     
-    // Метод для обновления уровня и очков
+    // update level and coins
     func updateLevel() {
         userWined = true
-        coinsManager.addCoins(5)  // Пример добавления монет
+        coinsManager.addCoins(5) //+scores
         
-        // Обновляем уровень и очки
+        //reload level and scores
         
-        // Увеличиваем уровень
+        //update lavel
         currentLevel += 1
         if currentLevel > 44 {
-            currentLevel = 1 // Перезапуск с первого уровня, например
+            currentLevel = 1 //restart
         }
         LevelManeger.shared.updateLevelAndScore(level: currentLevel, score: scores)
-        // Обновляем данные текущего уровня
+        //update current level data
         let levelData = LevelManeger.shared.getLevelData(by: currentLevel)
         remainingKnifes = levelData.countKnifes
         knifeStates = Array(repeating: false, count: levelData.countKnifes)
     }
     
-    // Получение данных уровня
+    //level data
     func getLevelData() -> Level {
         let levelData = LevelManeger.shared.getLevelData(by: currentLevel)
         remainingKnifes = levelData.countKnifes
@@ -61,14 +60,14 @@ class GameViewModel: ObservableObject {
         return levelData
     }
     
-    // Сброс уровня и очков
+    //reload(level = 1, score = 0)
     func restartLevel() {
         currentLevel = 1
         scores = 0
         userLosed = false
         LevelManeger.shared.reset()  // Сбросим данные в LevelManeger
     }
-    
+    //reload
     func reloadLevel() {
         let _ = coinsManager.subtractCoins(5)
         let num = currentLevel
@@ -79,7 +78,7 @@ class GameViewModel: ObservableObject {
         userLosed = false
     }
     
-    // Добавление очков
+    //+score
     func addScore() {
         scores += 1
     }

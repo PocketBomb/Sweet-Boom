@@ -22,7 +22,7 @@ struct ScoreRecordView: View {
     }
 }
 
-//MARK: - Score record
+//MARK: - Highest Level record
 struct HighestLevelView: View {
     var body: some View {
         ZStack {

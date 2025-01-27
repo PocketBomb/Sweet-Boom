@@ -2,7 +2,7 @@
 import Foundation
 
 //MARK: - CoinsManager its like pocket
-class CoinsManager: ObservableObject {
+final class CoinsManager: ObservableObject {
     static let shared = CoinsManager()
 
     //key for UserDefaults

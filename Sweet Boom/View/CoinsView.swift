@@ -34,13 +34,6 @@ struct CoinsView: View {
                         .offset(x: textOffsetX - coinImageWidth - 10)
                         .padding(.top, -3.4)
                         .padding(.leading, 3)
-//                    Text("\(coinsManager.currentCoins)")
-//                        .font(.custom("Acme-Regular", fixedSize: 40))
-//                        .foregroundColor(.white)
-//                        .frame(width: textWidth, height: 53)
-//                        .offset(x: textOffsetX - coinImageWidth - 10)
-//                        .padding(.top, -1)
-//                        .padding(.leading, 3)
                 }
                 .frame(width: coinViewWidth, height: 53, alignment: .leading)
             }
