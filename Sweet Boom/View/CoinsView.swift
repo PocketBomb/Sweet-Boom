@@ -14,6 +14,7 @@ struct CoinsView: View {
                 .scaledToFit()
                 .frame(width: 134, height: 53, alignment: .center)
             
+            
             GeometryReader { geometry in
                 let coinImageWidth: CGFloat = 53
                 let coinViewWidth: CGFloat = 134
