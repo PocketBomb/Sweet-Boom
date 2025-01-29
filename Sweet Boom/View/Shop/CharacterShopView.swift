@@ -15,6 +15,7 @@ struct CharacterShopView: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
             
+            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     
