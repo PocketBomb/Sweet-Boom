@@ -10,7 +10,7 @@ struct CharacterShopView: View {
     var body: some View {
         ZStack {
             //back
-            Image("shopBackgroundImage")
+            Image("shopBackImage")
                 .resizable()
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
