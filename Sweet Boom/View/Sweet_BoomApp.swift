@@ -10,26 +10,17 @@ struct Sweet_BoomApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if isLoading {
-                //MARK: - Loading View
-                LoadingView(onMain: {
-                    isLoading.toggle()
+            if isFirstLaunch {
+                //MARK: - only 1 time
+                LittleStoryView(onMain: {
+                    isFirstLaunch = false
                 })
                     .edgesIgnoringSafeArea(.all)
+                    
             } else {
-                if isFirstLaunch && !isMain {
-                    //MARK: - only 1 time
-                    LittleStoryView(onMain: {
-                        isFirstLaunch = false
-                        isMain = true
-                    })
-                        .edgesIgnoringSafeArea(.all)
-                        
-                } else {
-                    //MARK: - Main View
-                    MainView()
-                        .edgesIgnoringSafeArea(.all)
-                }
+                //MARK: - Main View
+                MainView()
+                    .edgesIgnoringSafeArea(.all)
             }
         }
         
